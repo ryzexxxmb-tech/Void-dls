@@ -13,8 +13,13 @@ jobs:
       - name: Unzip project
         run: unzip -q ./*.zip
 
-      - name: Fix screen API
-        run: grep -rl "gui.screen()" VoidDls/src | xargs sed -i 's/mc\.gui\.screen()/mc.screen/g'
+      - name: Fix API for 1.21.11
+        run: |
+          find VoidDls/src -name '*.java' -exec sed -i -E \
+            -e 's/mc\.gui\.screen\(\)/mc.screen/g' \
+            -e 's/(mc\.player|\bp)\.sendSystemMessage\(/net.minecraft.client.Minecraft.getInstance().gui.getChat().addMessage(/g' \
+            -e 's/mc\.gameMode\.interact\(p, a, new net/mc.gameMode.interactAt(p, a, new net/g' \
+            {} +
 
       - uses: actions/setup-java@v4
         with:
@@ -35,4 +40,3 @@ jobs:
           path: |
             VoidDls/build/libs/*.jar
             !VoidDls/build/libs/*-sources.jar
-            
