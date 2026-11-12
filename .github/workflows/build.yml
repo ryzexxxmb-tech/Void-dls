@@ -13,6 +13,9 @@ jobs:
       - name: Unzip project
         run: unzip -q ./*.zip
 
+      - name: Fix screen API
+        run: grep -rl "gui.screen()" VoidDls/src | xargs sed -i 's/mc\.gui\.screen()/mc.screen/g'
+
       - uses: actions/setup-java@v4
         with:
           distribution: temurin
@@ -32,3 +35,4 @@ jobs:
           path: |
             VoidDls/build/libs/*.jar
             !VoidDls/build/libs/*-sources.jar
+            
